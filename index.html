@@ -1,19 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>web_Taha</title>
-  </head>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پخش‌کننده ویدیو</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap');
 
-<body style="background-color: rgb(192, 62, 192); color: white;">
-<center>
-  <h1>به وب سایت طاها خوش آمدید</h1>
-</center>
-<center>
-<h2>
-    وب سایت تا مورخ 1404/4/19  بار گذاری نمی شود
-</h2>
-</center>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f9f7f7, #dbe2ef);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .upload-box {
+      border: 3px dashed #3f72af;
+      border-radius: 20px;
+      padding: 40px;
+      background: #ffffffaa;
+      text-align: center;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .upload-box:hover {
+      background: #ffffff;
+      box-shadow: 0 0 15px #3f72af88;
+    }
+
+    .upload-box input {
+      display: none;
+    }
+
+    .upload-box label {
+      font-size: 1.2rem;
+      color: #112d4e;
+      cursor: pointer;
+    }
+
+    video {
+      width: 80vw;
+      max-height: 80vh;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      display: none;
+      animation: zoomIn 1s ease-in-out;
+    }
+
+    .controls {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 80vw;
+      max-width: 800px;
+      color: #112d4e;
+      font-size: 1rem;
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.9);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    @keyframes zoomIn {
+      from {transform: scale(0.8); opacity: 0;}
+      to {transform: scale(1); opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+  <div class="upload-box" onclick="document.getElementById('videoInput').click()">
+    <label for="videoInput">برای آپلود ویدیو کلیک یا فایل MP4 را اینجا بکشید</label>
+    <input type="file" id="videoInput" accept="video/mp4">
+  </div>
+  <video id="videoPlayer" controls></video>
+  <div class="controls" id="videoControls">
+    <span id="currentTime">00:00</span>
+    <span id="duration">/ 00:00</span>
+  </div>
+
+  <script>
+    const videoInput = document.getElementById('videoInput');
+    const videoPlayer = document.getElementById('videoPlayer');
+    const uploadBox = document.querySelector('.upload-box');
+    const controls = document.getElementById('videoControls');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationEl = document.getElementById('duration');
+
+    videoInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file && file.type === 'video/mp4') {
+        const url = URL.createObjectURL(file);
+        videoPlayer.src = url;
+        videoPlayer.style.display = 'block';
+        controls.style.display = 'flex';
+        uploadBox.style.display = 'none';
+      } else {
+        alert('لطفاً فقط فایل MP4 انتخاب کنید.');
+      }
+    });
+
+    videoPlayer.addEventListener('loadedmetadata', () => {
+      durationEl.textContent = '/ ' + formatTime(videoPlayer.duration);
+    });
+
+    videoPlayer.addEventListener('timeupdate', () => {
+      currentTimeEl.textContent = formatTime(videoPlayer.currentTime);
+    });
+
+    function formatTime(time) {
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60);
+      return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+  </script>
 </body>
 </html>
