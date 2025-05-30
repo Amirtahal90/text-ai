@@ -6,14 +6,13 @@
   <title>ویدیو پلیر حرفه‌ای</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    /* فونت و پایه */
     @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap');
     body {
       margin: 0;
       font-family: 'Vazirmatn', sans-serif;
       background-color: #121212;
       color: #fff;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
     }
     
     .container {
@@ -53,6 +52,7 @@
       color: #fff;
       cursor: pointer;
       transition: transform 0.3s, color 0.3s;
+      z-index: 1500;
     }
     .settings-icon:hover {
       color: #00c3ff;
@@ -74,15 +74,17 @@
     .settings-panel.open {
       width: 50%;
     }
-
     .settings-panel .back {
       font-size: 20px;
       cursor: pointer;
       color: #fff;
       margin-bottom: 1rem;
-      display: flex;
+      display: none;
       align-items: center;
       gap: 8px;
+    }
+    .settings-panel.open .back {
+      display: flex;
     }
     .widget {
       background: #2b2b2b;
@@ -127,6 +129,20 @@
     .language-option i {
       color: lime;
     }
+    .download-btn {
+      background: #00c3ff;
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      display: inline-block;
+    }
+    .download-btn:hover {
+      background: #0099cc;
+    }
   </style>
 </head>
 <body>
@@ -159,6 +175,7 @@
     </div>
     <input type="file" id="videoInput" accept="video/mp4" style="display: none" />
     <video id="videoPlayer" controls style="display: none;"></video>
+    <a id="downloadBtn" class="download-btn" style="display: none" download>دانلود ویدیو</a>
   </div>
 
   <script>
@@ -167,6 +184,7 @@
     const modalContent = document.getElementById("modalContent");
     const videoInput = document.getElementById("videoInput");
     const videoPlayer = document.getElementById("videoPlayer");
+    const downloadBtn = document.getElementById("downloadBtn");
 
     function toggleSettings() {
       settingsPanel.classList.toggle("open");
@@ -181,7 +199,7 @@
           <div class="language-option">English</div>
         `;
       } else if (type === "author") {
-        html = `<p>سازنده وب‌سایت امیرطاها بارانی زاده هستم در خدمت شما!<br/>امیدوارم که از وب‌سایت ما امکانات لازم را بهره ببرید. سپاس 🙏<br/><br/>I am the builder of the Amirate Baranzadeh website at your service! I hope you enjoy our website. Thanks 🙏</p>`;
+        html = `<p>سازنده وب‌سایت امیرطاها بارانی زاده هستم در خدمت شما!<br/>امیدوارم که از وب‌سایت ما امکانات لازم را بهره ببرید. سپاس<br/><br/>I am the builder of the Amirate Baranzadeh website at your service! I hope you enjoy our website. Thanks</p>`;
       } else if (type === "support") {
         html = `<p>سلام بر شما کاربر عزیز، امیدوارم مشکلی نداشته باشید و اگر مشکلی دارید با ما در میان بگذارید.<br/>ایمیل: amyrtahabarany@gmail.com</p>`;
       }
@@ -202,6 +220,8 @@
         const url = URL.createObjectURL(file);
         videoPlayer.src = url;
         videoPlayer.style.display = "block";
+        downloadBtn.href = url;
+        downloadBtn.style.display = "inline-block";
       }
     });
   </script>
