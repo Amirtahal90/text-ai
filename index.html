@@ -7,14 +7,35 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap');
+
+    /* متغیرهای CSS */
+    :root {
+      --color-bg: #121212;
+      --color-bg-panel: #1f1f1f;
+      --color-bg-widget: #2b2b2b;
+      --color-bg-widget-hover: #3c3c3c;
+      --color-primary: #00c3ff;
+      --color-primary-hover: #0099cc;
+      --color-text: #fff;
+      --color-text-muted: #888;
+      --color-accent: #64ffda;
+      --font-family: 'Vazirmatn', sans-serif;
+      --border-radius: 12px;
+      --transition-speed: 0.3s;
+    }
+
+    /* بدنه */
     body {
       margin: 0;
-      font-family: 'Vazirmatn', sans-serif;
-      background-color: #121212;
-      color: #fff;
-      transition: background 0.3s ease;
+      font-family: var(--font-family);
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: var(--color-text);
+      transition: background var(--transition-speed) ease;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
-    
+
+    /* کانتینر مرکزی */
     .container {
       display: flex;
       flex-direction: column;
@@ -25,40 +46,54 @@
       padding: 1rem;
     }
 
+    /* باکس آپلود */
     .upload-box {
-      border: 2px dashed #888;
-      border-radius: 12px;
+      border: 2px dashed var(--color-text-muted);
+      border-radius: var(--border-radius);
       padding: 2rem;
       cursor: pointer;
-      transition: border 0.3s, background 0.3s;
+      transition: border var(--transition-speed), background var(--transition-speed), box-shadow var(--transition-speed);
+      background-color: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 8px rgba(0, 195, 255, 0);
+      font-weight: 600;
+      font-size: 1.1rem;
+      user-select: none;
+      max-width: 500px;
     }
     .upload-box:hover {
-      border-color: #00c3ff;
-      background: rgba(0, 195, 255, 0.1);
+      border-color: var(--color-primary);
+      background-color: rgba(0, 195, 255, 0.15);
+      box-shadow: 0 0 15px var(--color-primary);
     }
 
+    /* ویدیو پلیر */
     video {
       width: 100%;
       max-width: 900px;
       margin-top: 2rem;
-      border-radius: 12px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+      background-color: black;
     }
 
+    /* آیکون تنظیمات */
     .settings-icon {
       position: fixed;
       top: 20px;
       left: 20px;
-      font-size: 24px;
-      color: #fff;
+      font-size: 26px;
+      color: var(--color-primary);
       cursor: pointer;
-      transition: transform 0.3s, color 0.3s;
+      transition: transform var(--transition-speed), color var(--transition-speed);
       z-index: 1500;
+      user-select: none;
     }
     .settings-icon:hover {
-      color: #00c3ff;
+      color: var(--color-primary-hover);
       transform: rotate(90deg);
     }
 
+    /* پنل تنظیمات */
     .settings-panel {
       position: fixed;
       top: 0;
@@ -66,111 +101,185 @@
       width: 0;
       height: 100%;
       overflow: hidden;
-      background: #1f1f1f;
-      transition: width 0.4s ease;
+      background: var(--color-bg-panel);
+      box-shadow: 3px 0 15px rgba(0, 0, 0, 0.8);
+      transition: width 0.5s ease-in-out;
       z-index: 1000;
       padding: 2rem 1rem;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
     }
     .settings-panel.open {
-      width: 50%;
+      width: 40%;
+      min-width: 320px;
+      max-width: 400px;
     }
+
+    /* دکمه برگشت */
     .settings-panel .back {
       font-size: 20px;
       cursor: pointer;
-      color: #fff;
+      color: var(--color-text);
       margin-bottom: 1rem;
       display: none;
       align-items: center;
       gap: 8px;
+      user-select: none;
     }
     .settings-panel.open .back {
       display: flex;
     }
+
+    /* ویجت‌ها */
     .widget {
-      background: #2b2b2b;
+      background: var(--color-bg-widget);
       padding: 1rem;
       margin: 1rem 0;
-      border-radius: 12px;
-      transition: background 0.3s;
+      border-radius: var(--border-radius);
+      transition: background var(--transition-speed);
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--color-text);
+      user-select: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }
     .widget:hover {
-      background: #3c3c3c;
+      background: var(--color-bg-widget-hover);
+      box-shadow: 0 4px 16px var(--color-primary);
+      color: var(--color-primary);
     }
+    .widget i {
+      color: var(--color-primary);
+      transition: color var(--transition-speed);
+      font-size: 22px;
+    }
+    .widget:hover i {
+      color: var(--color-primary-hover);
+    }
+
+    /* مودال */
     .modal {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
-      background: #1a1a1a;
+      background: rgba(30, 30, 30, 0.95);
       padding: 2rem;
-      border-radius: 16px;
-      width: 80%;
+      border-radius: var(--border-radius);
+      width: 90%;
       max-width: 400px;
       opacity: 0;
-      transition: all 0.3s ease;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
       z-index: 2000;
+      color: var(--color-text);
+      user-select: text;
     }
     .modal.show {
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
+      pointer-events: auto;
     }
     .modal p {
-      line-height: 1.8;
+      line-height: 1.7;
+      font-weight: 400;
+      color: var(--color-text);
+      margin: 0;
     }
+    .modal h3 {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+    }
+
+    /* گزینه زبان */
     .language-option {
       display: flex;
       justify-content: space-between;
       margin: 1rem 0;
       padding: 0.5rem 1rem;
-      background: #2c2c2c;
+      background: var(--color-bg-widget);
       border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background var(--transition-speed);
+      user-select: none;
+    }
+    .language-option:hover {
+      background: var(--color-bg-widget-hover);
+      color: var(--color-primary);
     }
     .language-option i {
       color: lime;
     }
+
+    /* دکمه دانلود */
     .download-btn {
-      background: #00c3ff;
+      background: var(--color-primary);
       color: #000;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
       margin-top: 1rem;
       text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(0, 195, 255, 0.3);
+      transition: background var(--transition-speed);
       display: inline-block;
+      user-select: none;
     }
     .download-btn:hover {
-      background: #0099cc;
+      background: var(--color-primary-hover);
+      box-shadow: 0 7px 20px rgba(0, 153, 204, 0.6);
+    }
+
+    /* ریسپانسیو */
+    @media (max-width: 768px) {
+      .settings-panel.open {
+        width: 80%;
+      }
+      .upload-box {
+        max-width: 90vw;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="settings-icon" onclick="toggleSettings()">
+  <!-- آیکون تنظیمات -->
+  <div class="settings-icon" onclick="toggleSettings()" title="تنظیمات">
     <i class="fa-solid fa-gear"></i>
   </div>
 
-  <div class="settings-panel" id="settingsPanel">
-    <div class="back" onclick="toggleSettings()">
+  <!-- پنل تنظیمات -->
+  <div class="settings-panel" id="settingsPanel" aria-hidden="true">
+    <div class="back" onclick="toggleSettings()" role="button" tabindex="0" aria-label="بازگشت به صفحه اصلی">
       <i class="fa-solid fa-arrow-right"></i> برگشت
     </div>
-    <div class="widget" onclick="showModal('language')">
+    <div class="widget" onclick="showModal('language')" role="button" tabindex="0" aria-label="انتخاب زبان">
       <i class="fa-solid fa-language"></i> زبان وب‌سایت
     </div>
-    <div class="widget" onclick="showModal('author')">
+    <div class="widget" onclick="showModal('author')" role="button" tabindex="0" aria-label="سازنده">
       <i class="fa-solid fa-user"></i> سازنده
     </div>
-    <div class="widget" onclick="showModal('support')">
+    <div class="widget" onclick="showModal('support')" role="button" tabindex="0" aria-label="پشتیبانی">
       <i class="fa-solid fa-envelope"></i> پشتیبانی
     </div>
   </div>
 
-  <div class="modal" id="modal">
+  <!-- مودال -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
     <div id="modalContent"></div>
   </div>
 
+  <!-- محتوا اصلی -->
   <div class="container">
-    <div class="upload-box" onclick="document.getElementById('videoInput').click()">
+    <div class="upload-box" onclick="document.getElementById('videoInput').click()" role="button" tabindex="0" aria-label="آپلود ویدیو">
       فایل MP4 خود را آپلود یا اینجا بکشید و رها کنید
     </div>
     <input type="file" id="videoInput" accept="video/mp4" style="display: none" />
@@ -188,32 +297,58 @@
 
     function toggleSettings() {
       settingsPanel.classList.toggle("open");
+      // برای دسترسی بهتر aria-hidden رو کنترل می‌کنیم
+      if (settingsPanel.classList.contains("open")) {
+        settingsPanel.setAttribute("aria-hidden", "false");
+      } else {
+        settingsPanel.setAttribute("aria-hidden", "true");
+      }
     }
 
     function showModal(type) {
       let html = "";
       if (type === "language") {
         html = `
-          <h3>انتخاب زبان</h3>
-          <div class="language-option">فارسی <i class="fa-solid fa-check"></i></div>
-          <div class="language-option">English</div>
+          <h3 id="modalTitle">انتخاب زبان</h3>
+          <div class="language-option" onclick="selectLanguage('fa')" tabindex="0" role="button">فارسی <i class="fa-solid fa-check"></i></div>
+          <div class="language-option" onclick="selectLanguage('en')" tabindex="0" role="button">English</div>
         `;
       } else if (type === "author") {
-        html = `<p>سازنده وب‌سایت امیرطاها بارانی زاده هستم در خدمت شما!<br/>امیدوارم که از وب‌سایت ما امکانات لازم را بهره ببرید. سپاس<br/><br/>I am the builder of the Amirate Baranzadeh website at your service! I hope you enjoy our website. Thanks</p>`;
+        html = `
+          <h3 id="modalTitle">سازنده وب‌سایت</h3>
+          <p id="modalDesc">سازنده وب‌سایت امیرطاها بارانی زاده هستم در خدمت شما!<br/>
+          امیدوارم که از وب‌سایت ما امکانات لازم را بهره ببرید. سپاس<br/><br/>
+          I am the builder of the Amirate Baranzadeh website at your service! I hope you enjoy our website. Thanks</p>
+        `;
       } else if (type === "support") {
-        html = `<p>سلام بر شما کاربر عزیز، امیدوارم مشکلی نداشته باشید و اگر مشکلی دارید با ما در میان بگذارید.<br/>ایمیل: amyrtahabarany@gmail.com</p>`;
+        html = `
+          <h3 id="modalTitle">پشتیبانی</h3>
+          <p id="modalDesc">سلام بر شما کاربر عزیز، امیدوارم مشکلی نداشته باشید و اگر مشکلی دارید با ما در میان بگذارید.<br/>
+          ایمیل: <a href="mailto:amyrtahabarany@gmail.com" style="color: var(--color-primary); text-decoration: none;">amyrtahabarany@gmail.com</a></p>
+        `;
       }
       modalContent.innerHTML = html;
       modal.classList.add("show");
+
+      // بستن مودال با کلیک بیرون مودال
       setTimeout(() => {
         document.body.addEventListener("click", closeModal, { once: true });
       }, 100);
     }
 
-    function closeModal() {
+    function closeModal(e) {
+      // اگر روی مودال یا محتوای مودال کلیک شد، بسته نشود
+      if (e && (modal.contains(e.target) || e.target === modalContent)) return;
       modal.classList.remove("show");
     }
 
+    // انتخاب زبان (فقط نمایشی برای الان)
+    function selectLanguage(lang) {
+      alert(`زبان به ${lang === 'fa' ? 'فارسی' : 'English'} تغییر کرد (نمایشی)`);
+      closeModal();
+    }
+
+    // آپلود ویدیو
     videoInput.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (file && file.type === "video/mp4") {
@@ -222,8 +357,21 @@
         videoPlayer.style.display = "block";
         downloadBtn.href = url;
         downloadBtn.style.display = "inline-block";
+      } else {
+        alert("فایل انتخابی باید از نوع MP4 باشد!");
       }
+    });
+
+    // اجازه می‌دهیم که کیبورد هم بتونه دکمه‌ها و ویجت‌ها رو فعال کنه
+    document.querySelectorAll('[role="button"]').forEach(btn => {
+      btn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          btn.click();
+        }
+      });
     });
   </script>
 </body>
 </html>
+
