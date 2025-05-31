@@ -1,98 +1,137 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>کاربران آنلاین</title>
+  <meta charset="UTF-8">
+  <title>ارسال پیام به پشتیبانی</title>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+    * {
+      box-sizing: border-box;
+      font-family: 'Vazirmatn', sans-serif;
+    }
     body {
       margin: 0;
-      font-family: 'Vazirmatn', sans-serif;
-      background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      flex-direction: column;
-      color: white;
+      padding: 20px;
     }
-
-    .card {
+    .container {
       background: white;
-      color: #222;
-      padding: 2.5rem 3rem;
-      border-radius: 2rem;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+      animation: float 1.5s ease;
+    }
+    h2 {
       text-align: center;
-      animation: fadeIn 1s ease;
+      margin-bottom: 20px;
+      color: #333;
     }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s ease;
     }
-
-    #onlineCount {
-      font-size: 5rem;
+    input:focus, textarea:focus {
+      border-color: #74ebd5;
+      outline: none;
+      box-shadow: 0 0 10px #74ebd5aa;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(45deg, #74ebd5, #ACB6E5);
+      border: none;
+      color: white;
+      font-size: 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #5ad9c8, #9ea9db);
+    }
+    .message {
+      margin-top: 15px;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px;
       font-weight: bold;
-      color: #0072ff;
-      transition: transform 0.3s ease, color 0.3s ease;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .error {
+      background: #ffdddd;
+      color: #d8000c;
+    }
+    .success {
+      background: #ddffdd;
+      color: #4F8A10;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
+      from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>تعداد کاربران آنلاین:</h1>
-    <div id="onlineCount">0</div>
+  <div class="container">
+    <h2>ارسال پیام به پشتیبانی</h2>
+    <input type="text" id="name" placeholder="نام شما">
+    <textarea id="message" rows="4" placeholder="پیام شما..."></textarea>
+    <button onclick="sendMessage()">ارسال پیام</button>
+    <div id="msgBox"></div>
   </div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
   <script>
-    // تنظیمات Firebase شما:
-    const firebaseConfig = {
-      apiKey: "AIzaSyA9RMVafEAEL1-KKr5mRP_SB7lkTOPeuPU",
-      authDomain: "myweb-d3ee8.firebaseapp.com",
-      projectId: "myweb-d3ee8",
-      storageBucket: "myweb-d3ee8.firebasestorage.app",
-      messagingSenderId: "163025370023",
-      appId: "1:163025370023:web:2c62cb6cdcc8eff8f01482",
-      measurementId: "G-9FR7P2EVM4",
-      databaseURL: "https://myweb-d3ee8-default-rtdb.firebaseio.com"
-    };
+    function sendMessage() {
+      const name = document.getElementById('name').value.trim();
+      const message = document.getElementById('message').value.trim();
+      const msgBox = document.getElementById('msgBox');
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+      msgBox.innerHTML = ''; // Clear previous
 
-    // ساخت شناسه تصادفی برای هر کاربر
-    const userId = "user_" + Math.random().toString(36).substr(2, 9);
-    const userRef = db.ref("onlineUsers/" + userId);
+      if (name.length < 1) {
+        showMessage('لطفاً نام خود را وارد کنید.', 'error');
+        return;
+      }
 
-    // وقتی سایت باز میشه، کاربر رو آنلاین کن
-    userRef.set(true);
-    userRef.onDisconnect().remove();
+      if (message.length < 6) {
+        showMessage('پیام باید حداقل ۶ کاراکتر باشد.', 'error');
+        return;
+      }
 
-    // نمایش تعداد کاربران آنلاین
-    const countRef = db.ref("onlineUsers");
-    countRef.on("value", (snapshot) => {
-      const count = snapshot.numChildren();
-      const display = document.getElementById("onlineCount");
+      // ذخیره پیام در LocalStorage
+      let messages = JSON.parse(localStorage.getItem('supportMessages')) || [];
+      messages.unshift({ name, message });
+      localStorage.setItem('supportMessages', JSON.stringify(messages));
 
-      // انیمیشن عدد
-      display.style.transform = "scale(1.2)";
-      setTimeout(() => {
-        display.style.transform = "scale(1)";
-      }, 200);
+      // نمایش پیام موفقیت
+      showMessage('پیام با موفقیت ارسال شد ✔️', 'success');
 
-      display.textContent = count;
-    });
+      // پاک‌سازی فرم
+      document.getElementById('name').value = '';
+      document.getElementById('message').value = '';
+    }
+
+    function showMessage(text, type) {
+      const msgBox = document.getElementById('msgBox');
+      msgBox.innerHTML = `<div class="message ${type}">${text}</div>`;
+    }
   </script>
 </body>
 </html>
