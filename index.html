@@ -3,159 +3,151 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ورود با گوگل - صفحه زیبا و حرفه‌ای</title>
+<title>ورود با گوگل - صفحه ورود</title>
 
-<!-- فونت وزیر فارسی -->
+<!-- فونت فارسی وزیر -->
 <style>
-  @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+/* Reset */
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+  font-family: 'Vazir', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  overflow: hidden;
+  direction: rtl;
+}
 
-  /* تنظیمات کلی */
-  body {
-    font-family: 'Vazir', sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    overflow: hidden;
-  }
+/* کانتینر اصلی */
+.container {
+  background: rgba(255 255 255 / 0.12);
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  width: 360px;
+  text-align: center;
+  border: 1px solid rgba(255 255 255 / 0.18);
+  animation: fadeInScale 1s ease forwards;
+}
 
-  /* کارت اصلی با Glassmorphism */
-  .container {
-    background: rgba(255 255 255 / 0.12);
-    padding: 40px 50px;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    text-align: center;
-    width: 350px;
-    animation: fadeIn 1.2s ease forwards;
-    border: 1px solid rgba(255 255 255 / 0.18);
+/* انیمیشن ظاهر شدن */
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
   }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
-  /* عنوان */
-  h1 {
-    margin-bottom: 25px;
-    font-weight: 700;
-    font-size: 2.2rem;
-    letter-spacing: 1.2px;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  }
+h1 {
+  margin-bottom: 30px;
+  font-weight: 700;
+  font-size: 2.3rem;
+  letter-spacing: 1.3px;
+  user-select: none;
+}
 
-  /* دکمه خروج */
-  .btn-logout {
-    margin-top: 30px;
-    padding: 12px 25px;
-    font-size: 1.1rem;
-    background-color: #ff3b3f;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    color: white;
-    font-weight: 600;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 10px rgba(255, 59, 63, 0.6);
-  }
+/* استایل دکمه گوگل */
+#g_id_signin {
+  margin: 0 auto;
+  width: 280px;
+}
 
-  .btn-logout:hover {
-    background-color: #d93025;
-    transform: scale(1.05);
-    box-shadow: 0 6px 14px rgba(217, 48, 37, 0.8);
-  }
+/* اطلاعات کاربر */
+#user-info {
+  display: none;
+  text-align: right;
+  direction: rtl;
+  margin-top: 10px;
+  user-select: text;
+}
 
-  /* بخش اطلاعات کاربر */
-  #user-info {
-    display: none;
-    text-align: right;
-    direction: rtl;
-  }
+#user-info p {
+  font-size: 1.25rem;
+  margin: 15px 0;
+  color: #f1f1f1;
+  text-shadow: 0 0 4px rgba(0,0,0,0.4);
+}
 
-  #user-info p {
-    margin: 15px 0;
-    font-size: 1.2rem;
-    animation: slideIn 0.8s ease forwards;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-  }
+/* انیمیشن دکمه گوگل */
+#g_id_signin > div {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  border-radius: 10px !important;
+}
+#g_id_signin > div:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(255 255 255 / 0.4);
+}
 
-  /* انیمیشن‌ها */
-  @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1; transform: translateY(0);}
-  }
-
-  @keyframes slideIn {
-    from {opacity: 0; transform: translateX(50px);}
-    to {opacity: 1; transform: translateX(0);}
-  }
-
-  /* تنظیم دکمه گوگل */
-  .g_id_signin > div {
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
-    border-radius: 12px !important;
-    transition: transform 0.3s ease;
-  }
-  .g_id_signin > div:hover {
-    transform: scale(1.05);
-  }
-
-  /* واکنش‌گرایی */
-  @media (max-width: 400px) {
-    .container {
-      width: 90vw;
-      padding: 30px 25px;
-    }
-    h1 {
-      font-size: 1.8rem;
-    }
-    #user-info p {
-      font-size: 1rem;
-    }
-    .btn-logout {
-      font-size: 1rem;
-      padding: 10px 20px;
-    }
-  }
+/* متن خوش آمدگویی */
+#welcome-text {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+  letter-spacing: 1.1px;
+  user-select: none;
+  color: #ffd700;
+  text-shadow: 0 0 6px #ffd700aa;
+}
 </style>
 
-<!-- کتابخانه Google Identity Services -->
+<!-- اسکریپت گوگل برای ورود -->
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+
 </head>
 <body>
 
 <div class="container" id="login-container">
   <h1>ورود با گوگل</h1>
-  <div id="g_id_onload"
+  <div id="g_id_signin"
+       data-type="standard"
+       data-shape="rectangular"
+       data-theme="filled_blue"
+       data-text="signin_with"
+       data-size="large"
+       data-logo_alignment="left"
+       data-width="280"
        data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE"
-       data-callback="handleCredentialResponse"
-       data-auto_prompt="false">
+       data-callback="handleCredentialResponse">
   </div>
-  <div class="g_id_signin" data-type="standard"></div>
 </div>
 
 <div class="container" id="user-info" role="main" aria-live="polite">
-  <h1>اطلاعات شما</h1>
+  <div id="welcome-text"></div>
   <p><strong>نام و نام خانوادگی:</strong> <span id="fullName"></span></p>
   <p><strong>ایمیل:</strong> <span id="email"></span></p>
-  <button class="btn-logout" onclick="logout()" aria-label="خروج از حساب کاربری">خروج</button>
 </div>
 
 <script>
   function handleCredentialResponse(response) {
     const data = parseJwt(response.credential);
-
-    // برای اطمینان نام کامل را از داده بگیریم
     const fullName = data.name || (data.given_name + ' ' + data.family_name);
+    const email = data.email;
 
     document.getElementById('fullName').textContent = fullName;
-    document.getElementById('email').textContent = data.email;
+    document.getElementById('email').textContent = email;
+    document.getElementById('welcome-text').textContent = `خوش آمدی، ${fullName}! 🎉`;
 
+    // مخفی کردن صفحه ورود و نمایش اطلاعات
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('user-info').style.display = 'block';
   }
 
+  // تابع برای دیکد JWT که گوگل میفرسته
   function parseJwt(token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -164,13 +156,9 @@
     }).join(''));
     return JSON.parse(jsonPayload);
   }
-
-  function logout() {
-    document.getElementById('user-info').style.display = 'none';
-    document.getElementById('login-container').style.display = 'block';
-  }
 </script>
 
 </body>
 </html>
+
 
