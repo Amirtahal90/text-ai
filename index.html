@@ -1,164 +1,457 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ورود با گوگل - صفحه ورود</title>
-
-<!-- فونت فارسی وزیر -->
-<style>
-@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
-/* Reset */
-* {
-  margin: 0; padding: 0; box-sizing: border-box;
-  font-family: 'Vazir', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-body {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  overflow: hidden;
-  direction: rtl;
-}
-
-/* کانتینر اصلی */
-.container {
-  background: rgba(255 255 255 / 0.12);
-  padding: 40px 50px;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  width: 360px;
-  text-align: center;
-  border: 1px solid rgba(255 255 255 / 0.18);
-  animation: fadeInScale 1s ease forwards;
-}
-
-/* انیمیشن ظاهر شدن */
-@keyframes fadeInScale {
-  0% {
-    opacity: 0;
-    transform: scale(0.85);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-h1 {
-  margin-bottom: 30px;
-  font-weight: 700;
-  font-size: 2.3rem;
-  letter-spacing: 1.3px;
-  user-select: none;
-}
-
-/* استایل دکمه گوگل */
-#g_id_signin {
-  margin: 0 auto;
-  width: 280px;
-}
-
-/* اطلاعات کاربر */
-#user-info {
-  display: none;
-  text-align: right;
-  direction: rtl;
-  margin-top: 10px;
-  user-select: text;
-}
-
-#user-info p {
-  font-size: 1.25rem;
-  margin: 15px 0;
-  color: #f1f1f1;
-  text-shadow: 0 0 4px rgba(0,0,0,0.4);
-}
-
-/* انیمیشن دکمه گوگل */
-#g_id_signin > div {
-  transition: transform 0.3s ease;
-  cursor: pointer;
-  border-radius: 10px !important;
-}
-#g_id_signin > div:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 15px rgba(255 255 255 / 0.4);
-}
-
-/* متن خوش آمدگویی */
-#welcome-text {
-  font-size: 1.5rem;
-  margin-bottom: 15px;
-  font-weight: 600;
-  letter-spacing: 1.1px;
-  user-select: none;
-  color: #ffd700;
-  text-shadow: 0 0 6px #ffd700aa;
-}
-</style>
-
-<!-- اسکریپت گوگل برای ورود -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماشین حساب حرفه ای</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            user-select: none;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            overflow: hidden;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .mode-selector {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .mode-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .mode-btn {
+            padding: 15px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            background: transparent;
+            border: 3px solid #FF8C00;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .mode-btn:hover {
+            background: #FF8C00;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 140, 0, 0.3);
+        }
+        
+        .calculator {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0);
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            padding: 20px;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .calculator.pc {
+            width: 400px;
+        }
+        
+        .calculator.mobile {
+            width: 320px;
+        }
+        
+        .display {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: flex-end;
+            padding: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .previous-operand {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+            height: 24px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+            text-align: right;
+        }
+        
+        .current-operand {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+            text-align: right;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .btn {
+            height: 60px;
+            border-radius: 15px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn.span-2 {
+            grid-column: span 2;
+        }
+        
+        .btn.operator {
+            background: rgba(255, 166, 0, 0.3);
+        }
+        
+        .btn.operator:hover {
+            background: rgba(255, 166, 0, 0.5);
+        }
+        
+        .btn.equals {
+            background: rgba(0, 191, 255, 0.3);
+        }
+        
+        .btn.equals:hover {
+            background: rgba(0, 191, 255, 0.5);
+        }
+        
+        .btn.clear, .btn.delete {
+            background: rgba(220, 20, 60, 0.3);
+        }
+        
+        .btn.clear:hover, .btn.delete:hover {
+            background: rgba(220, 20, 60, 0.5);
+        }
+        
+        /* انیمیشن برای حالت موبایل */
+        @media (max-width: 480px) {
+            .calculator.mobile {
+                width: 90%;
+                max-width: 320px;
+            }
+            
+            .btn {
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .display {
+                height: 100px;
+            }
+            
+            .current-operand {
+                font-size: 2rem;
+            }
+        }
+        
+        /* انیمیشن های خاص */
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        
+        @keyframes fadeOut {
+            to {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.5s forwards;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="mode-selector">
+        <div class="mode-buttons">
+            <button class="mode-btn" id="pc-btn">PC</button>
+            <button class="mode-btn" id="mobile-btn">Mobile</button>
+        </div>
+    </div>
+    
+    <div class="calculator" id="calculator">
+        <div class="display">
+            <div class="previous-operand" id="previous-operand"></div>
+            <div class="current-operand" id="current-operand">0</div>
+        </div>
+        <div class="buttons">
+            <button class="btn clear" id="clear">AC</button>
+            <button class="btn delete" id="delete">DEL</button>
+            <button class="btn operator" id="percent">%</button>
+            <button class="btn operator" id="divide">÷</button>
+            
+            <button class="btn" id="seven">7</button>
+            <button class="btn" id="eight">8</button>
+            <button class="btn" id="nine">9</button>
+            <button class="btn operator" id="multiply">×</button>
+            
+            <button class="btn" id="four">4</button>
+            <button class="btn" id="five">5</button>
+            <button class="btn" id="six">6</button>
+            <button class="btn operator" id="subtract">−</button>
+            
+            <button class="btn" id="one">1</button>
+            <button class="btn" id="two">2</button>
+            <button class="btn" id="three">3</button>
+            <button class="btn operator" id="add">+</button>
+            
+            <button class="btn span-2" id="zero">0</button>
+            <button class="btn" id="decimal">.</button>
+            <button class="btn equals" id="equals">=</button>
+        </div>
+    </div>
 
-<div class="container" id="login-container">
-  <h1>ورود با گوگل</h1>
-  <div id="g_id_signin"
-       data-type="standard"
-       data-shape="rectangular"
-       data-theme="filled_blue"
-       data-text="signin_with"
-       data-size="large"
-       data-logo_alignment="left"
-       data-width="280"
-       data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE"
-       data-callback="handleCredentialResponse">
-  </div>
-</div>
-
-<div class="container" id="user-info" role="main" aria-live="polite">
-  <div id="welcome-text"></div>
-  <p><strong>نام و نام خانوادگی:</strong> <span id="fullName"></span></p>
-  <p><strong>ایمیل:</strong> <span id="email"></span></p>
-</div>
-
-<script>
-  function handleCredentialResponse(response) {
-    const data = parseJwt(response.credential);
-    const fullName = data.name || (data.given_name + ' ' + data.family_name);
-    const email = data.email;
-
-    document.getElementById('fullName').textContent = fullName;
-    document.getElementById('email').textContent = email;
-    document.getElementById('welcome-text').textContent = `خوش آمدی، ${fullName}! 🎉`;
-
-    // مخفی کردن صفحه ورود و نمایش اطلاعات
-    document.getElementById('login-container').style.display = 'none';
-    document.getElementById('user-info').style.display = 'block';
-  }
-
-  // تابع برای دیکد JWT که گوگل میفرسته
-  function parseJwt(token) {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload);
-  }
-</script>
-
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modeSelector = document.querySelector('.mode-selector');
+            const calculator = document.getElementById('calculator');
+            const pcBtn = document.getElementById('pc-btn');
+            const mobileBtn = document.getElementById('mobile-btn');
+            
+            const currentOperandElement = document.getElementById('current-operand');
+            const previousOperandElement = document.getElementById('previous-operand');
+            const numberButtons = document.querySelectorAll('[id^="one"], [id^="two"], [id^="three"], [id^="four"], [id^="five"], [id^="six"], [id^="seven"], [id^="eight"], [id^="nine"], [id^="zero"], [id^="decimal"]');
+            const operationButtons = document.querySelectorAll('[id^="add"], [id^="subtract"], [id^="multiply"], [id^="divide"], [id^="percent"]');
+            const equalsButton = document.getElementById('equals');
+            const clearButton = document.getElementById('clear');
+            const deleteButton = document.getElementById('delete');
+            
+            let currentOperand = '0';
+            let previousOperand = '';
+            let operation = undefined;
+            let resetScreen = false;
+            
+            // انتخاب حالت PC یا Mobile
+            pcBtn.addEventListener('click', () => {
+                modeSelector.classList.add('fade-out');
+                setTimeout(() => {
+                    modeSelector.style.display = 'none';
+                    calculator.classList.add('pc');
+                    calculator.classList.remove('mobile');
+                    calculator.classList.add('slide-up');
+                }, 500);
+            });
+            
+            mobileBtn.addEventListener('click', () => {
+                modeSelector.classList.add('fade-out');
+                setTimeout(() => {
+                    modeSelector.style.display = 'none';
+                    calculator.classList.add('mobile');
+                    calculator.classList.remove('pc');
+                    calculator.classList.add('slide-up');
+                }, 500);
+            });
+            
+            // توابع ماشین حساب
+            function updateDisplay() {
+                currentOperandElement.innerText = currentOperand;
+                previousOperandElement.innerText = previousOperand;
+            }
+            
+            function appendNumber(number) {
+                if (currentOperand === '0' || resetScreen) {
+                    currentOperand = '';
+                    resetScreen = false;
+                }
+                
+                if (number === '.' && currentOperand.includes('.')) return;
+                currentOperand += number;
+                updateDisplay();
+            }
+            
+            function chooseOperation(op) {
+                if (currentOperand === '') return;
+                if (previousOperand !== '') {
+                    compute();
+                }
+                
+                operation = op;
+                previousOperand = `${currentOperand} ${op}`;
+                currentOperand = '';
+                updateDisplay();
+            }
+            
+            function compute() {
+                let computation;
+                const prev = parseFloat(previousOperand);
+                const current = parseFloat(currentOperand);
+                
+                if (isNaN(prev) || isNaN(current)) return;
+                
+                switch (operation) {
+                    case '+':
+                        computation = prev + current;
+                        break;
+                    case '−':
+                        computation = prev - current;
+                        break;
+                    case '×':
+                        computation = prev * current;
+                        break;
+                    case '÷':
+                        computation = prev / current;
+                        break;
+                    case '%':
+                        computation = prev % current;
+                        break;
+                    default:
+                        return;
+                }
+                
+                currentOperand = computation.toString();
+                operation = undefined;
+                previousOperand = '';
+                resetScreen = true;
+                updateDisplay();
+            }
+            
+            function clear() {
+                currentOperand = '0';
+                previousOperand = '';
+                operation = undefined;
+                updateDisplay();
+            }
+            
+            function deleteNumber() {
+                if (currentOperand.length === 1 || (currentOperand.length === 2 && currentOperand.startsWith('-'))) {
+                    currentOperand = '0';
+                } else {
+                    currentOperand = currentOperand.slice(0, -1);
+                }
+                updateDisplay();
+            }
+            
+            // Event Listeners
+            numberButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    appendNumber(button.innerText);
+                });
+            });
+            
+            operationButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    chooseOperation(button.innerText);
+                });
+            });
+            
+            equalsButton.addEventListener('click', () => {
+                compute();
+            });
+            
+            clearButton.addEventListener('click', () => {
+                clear();
+            });
+            
+            deleteButton.addEventListener('click', () => {
+                deleteNumber();
+            });
+            
+            // پشتیبانی از صفحه کلید
+            document.addEventListener('keydown', (e) => {
+                if (e.key >= 0 && e.key <= 9) appendNumber(e.key);
+                if (e.key === '.') appendNumber('.');
+                if (e.key === '+') chooseOperation('+');
+                if (e.key === '-') chooseOperation('−');
+                if (e.key === '*') chooseOperation('×');
+                if (e.key === '/') chooseOperation('÷');
+                if (e.key === '%') chooseOperation('%');
+                if (e.key === 'Enter' || e.key === '=') compute();
+                if (e.key === 'Escape') clear();
+                if (e.key === 'Backspace') deleteNumber();
+            });
+        });
+    </script>
 </body>
 </html>
-
-
