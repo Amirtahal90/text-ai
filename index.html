@@ -1,52 +1,172 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
-
+<html lang="fa">
 <head>
   <meta charset="UTF-8">
+<title>myip</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>سپهر کونی</title>
-  <link rel="icon" href="https://www.flaticon.com/icon-fonts-most-downloaded?brands=1&type=uicon">
-
+  <link rel="icon" href="https://www.flaticon.com/free-icon/ip-address_6726822">
   <style>
+    @font-face{
+      font-family: VB;
+      src: url(./Vazir-Bold.ttf);
+    }
+    /* ==== Reset & Base ==== */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn',sans-serif; }
+    html, body { height:100%; width:100%; overflow:hidden; }
+
+    /* ==== پس‌زمینه دینامیک ==== */
     body {
-      font-family: Vazir;
-      background-color: rgb(238, 64, 157);
-      border-radius: 50px;
+      font-family: VB;
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1a2a6c);
+      background-size: 400% 400%;
+      animation: bgAnimation 15s ease infinite;
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; text-align:center;
+    }
+    @keyframes bgAnimation {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
     }
 
-    .center {
-      padding-top: 200px;
-      padding-bottom: 50px;
-
+    /* ==== کانتینر و انیمیشن ورود ==== */
+    .container { 
+      font-family: VB;
+      
+      animation: fadeInUp 0.8s ease forwards; opacity:0; }
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
     }
 
-    .div {
-      background-color: darkorange;
-      border-radius: 50px;
-      border: 2px solid white;
-      padding: 14px;
-      width: 250px;
-      height: 60px;
+    /* ==== دکمه شروع ==== */
+    .start-btn {
+      background:#00c9ff; padding:16px 40px; font-size:1.4rem;
+      border:none; border-radius:14px; cursor:pointer;
+      box-shadow:0 0 25px rgba(0,201,255,0.6);
+      transition:0.3s ease;
+    }
+    .start-btn:hover {
+      font-family: VB;
+
+      background:#ff6b6b;
+      box-shadow:0 0 30px rgba(255,107,107,0.7);
+      transform:scale(1.05) rotate(-2deg);
     }
 
-    .p {
-      color: black;
+    /* ==== صفحه لودینگ ==== */
+    .loading-page { display:none; flex-direction:column; align-items:center; }
+    .dots { display:flex; gap:12px; margin-top:30px; }
+    .dot {
+      width:16px; height:16px; border-radius:50%;
+      background:#fff; animation: dotPulse 1.2s infinite;
+    }
+    .dot:nth-child(2) { animation-delay:0.2s; }
+    .dot:nth-child(3) { animation-delay:0.4s; }
+    @keyframes dotPulse {
+      0%,100% { transform:scale(0.6); opacity:0.3; }
+      50% { transform:scale(1.3); opacity:1; }
+    }
+
+    /* ==== کادرهای اطلاعات ==== */
+    .result-page { display:none; flex-direction:column; align-items:center; gap:18px; padding:20px; }
+    .info-box {
+      background:rgba(255,255,255,0.1); padding:18px 25px;
+      border-radius:16px; min-width:280px;
+      box-shadow:0 0 20px rgba(0,0,0,0.5);
+      transition:0.3s ease, background 0.3s ease;
+      transform:translateY(20px); opacity:0;
+      animation: popUp 0.6s forwards;
+    }
+    .info-box:nth-child(1) { animation-delay:0.2s; }
+    .info-box:nth-child(2) { animation-delay:0.4s; }
+    .info-box:nth-child(3) { animation-delay:0.6s; }
+    .info-box:hover {
+      background:rgba(255,255,255,0.2);
+      transform:translateY(0) scale(1.02);
+    }
+    @keyframes popUp {
+      to { transform:translateY(0); opacity:1; }
+    }
+
+    /* ==== صدا ==== */
+    audio { display:none; }
+
+    /* ==== ریسپانسیو ==== */
+    @media (max-width:600px) {
+      .start-btn { padding:12px 30px; font-size:1.1rem; }
+      .info-box { font-size:1rem; min-width:200px; }
     }
   </style>
 </head>
-
 <body>
-  <center class="center">
 
-    <div class="div">
+  <!-- صفحه شروع -->
+  <div class="container" id="startPage">
+    <button class="start-btn" id="startBtn">ایپی من</button>
+  </div>
 
-      <p class="p">
-سپهر ایذری است  برادر محمود
-      </p>
-
+  <!-- صفحه لودینگ -->
+  <div class="container loading-page" id="loadingPage">
+    <h2>در حال دریافت اطلاعات...</h2>
+    <div class="dots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
     </div>
+  </div>
 
-  </center>
+  <!-- صفحه نتیجه -->
+  <div class="container result-page" id="resultPage">
+    <div class="info-box" id="ip">IP: ...</div>
+    <div class="info-box" id="location">مکان: ...</div>
+    <div class="info-box" id="isp">سرویس‌دهنده اینترنت: ...</div>
+  </div>
+
+  <!-- صدای خوش‌آمدگویی -->
+  <audio id="welcomeAudio" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+
+  <script>
+    // تعریف المان‌ها
+    const startBtn    = document.getElementById('startBtn');
+    const startPage   = document.getElementById('startPage');
+    const loadingPage = document.getElementById('loadingPage');
+    const resultPage  = document.getElementById('resultPage');
+    const ipBox       = document.getElementById('ip');
+    const locBox      = document.getElementById('location');
+    const ispBox      = document.getElementById('isp');
+    const welcomeAudio= document.getElementById('welcomeAudio');
+
+    startBtn.addEventListener('click', () => {
+      // نمایش لودینگ
+      startPage.style.display   = 'none';
+      loadingPage.style.display = 'flex';
+
+      setTimeout(() => {
+        fetch('https://ipapi.co/json/')
+          .then(res => res.json())
+          .then(data => {
+            // مخفی کردن لودینگ و نمایش نتیجه
+            loadingPage.style.display = 'none';
+            resultPage.style.display  = 'flex';
+
+            // پر کردن اطلاعات
+            ipBox.innerText  = 'IP: ' + data.ip;
+            locBox.innerText = `مکان: ${data.city}، ${data.region}، ${data.country_name}`;
+            ispBox.innerText = 'سرویس‌دهنده اینترنت: ' + data.org;
+
+            // پخش صدای خوش‌آمدگویی
+            welcomeAudio.play().catch(() => {});
+          })
+          .catch(() => {
+            alert('خطا در دریافت اطلاعات IP');
+            // برگرداندن به صفحه شروع
+            loadingPage.style.display = 'none';
+            startPage.style.display   = 'flex';
+          });
+      }, 2500);
+    });
+  </script>
 </body>
-
 </html>
+
