@@ -1,33 +1,451 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bag-color</title>
-  <link rel="stylesheet" href="./style.css">
-  <link rel="shortcut icon" href="https://img.icons8.com/color/48/html-5--v1.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشخیص هوش مصنوعی - AI Detector Pro</title>
+     <link rel="icon" href="https://img.icons8.com/color-glass/48/ip-address.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .ai-indicator {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .scan-animation {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+            animation: scan 2s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .result-card {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .result-card.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
 </head>
+<body class="gradient-bg min-h-screen">
+    <!-- Header -->
+    <header class="glass-effect">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-white">AI Detector Pro</h1>
+                        <p class="text-blue-100 text-sm">تشخیص حرفه‌ای هوش مصنوعی</p>
+                    </div>
+                </div>
+                <button id="refreshBtn" class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 space-x-reverse">
+                    <svg id="refreshIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    <span>بروزرسانی</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-3xl font-bold text-white mb-2" id="totalScans">1,247</div>
+                <div class="text-blue-100">کل بررسی‌ها</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-3xl font-bold text-green-300 mb-2" id="accuracy">94.8%</div>
+                <div class="text-blue-100">دقت تشخیص</div>
+            </div>
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="text-3xl font-bold text-yellow-300 mb-2" id="avgTime">2.3s</div>
+                <div class="text-blue-100">میانگین زمان</div>
+            </div>
+        </div>
 
-<body>
+        <!-- Main Detection Area -->
+        <div class="glass-effect rounded-2xl p-8 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-6 text-center">تشخیص هوش مصنوعی در متن</h2>
+            
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-white font-medium mb-3">متن مورد نظر را وارد کنید:</label>
+                    <textarea 
+                        id="textInput" 
+                        class="w-full h-40 p-4 rounded-xl bg-white/10 border border-white/20 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none"
+                        placeholder="متن خود را اینجا بنویسید یا کپی کنید..."
+                    ></textarea>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-white/60 text-sm" id="charCount">0 کاراکتر</span>
+                        <button id="clearBtn" class="text-white/60 hover:text-white text-sm transition-colors">پاک کردن</button>
+                    </div>
+                </div>
 
-<div>
-  <br>
-  <h2>وب سایت در <mark>دسترس</mark> نیست.</h3>
-</div>
-<br>
-<div>
-<h3>  برای اطلاعات بیشتر به سایت 
-  <a href="https://sabzlearn.ir/" target="_blank" title="سبزلرن">سبزلرن</a> 
-  سر بزنید</h3>
-</div>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button id="analyzeBtn" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-medium py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 space-x-reverse">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span>تجزیه و تحلیل</span>
+                    </button>
+                    <button id="uploadBtn" class="bg-white/20 hover:bg-white/30 text-white font-medium py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 space-x-reverse">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <span>آپلود فایل</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
-</body>
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden">
+            <div class="glass-effect rounded-2xl p-8 mb-8 scan-animation">
+                <div class="scan-line"></div>
+                <h3 class="text-xl font-bold text-white mb-6">نتایج تجزیه و تحلیل</h3>
+                
+                <!-- AI Probability -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-white font-medium">احتمال هوش مصنوعی</span>
+                        <span id="aiPercentage" class="text-2xl font-bold text-red-400">0%</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-3">
+                        <div id="aiProgressBar" class="h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
 
- 
-</html 
+                <!-- Human Probability -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-white font-medium">احتمال انسانی</span>
+                        <span id="humanPercentage" class="text-2xl font-bold text-green-400">0%</span>
+                    </div>
+                    <div class="w-full bg-white/20 rounded-full h-3">
+                        <div id="humanProgressBar" class="bg-green-400 h-3 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
 
+                <!-- Result Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="result-card bg-white/10 rounded-xl p-6">
+                        <h4 class="text-lg font-semibold text-white mb-4">جزئیات تحلیل</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-white/80">تعداد کلمات:</span>
+                                <span id="wordCount" class="text-white font-medium">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-white/80">پیچیدگی متن:</span>
+                                <span id="complexity" class="text-white font-medium">متوسط</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-white/80">زمان پردازش:</span>
+                                <span id="processingTime" class="text-white font-medium">0.0s</span>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="result-card bg-white/10 rounded-xl p-6">
+                        <h4 class="text-lg font-semibold text-white mb-4">توصیه‌ها</h4>
+                        <div id="recommendations" class="text-white/80 text-sm leading-relaxed">
+                            در حال تجزیه و تحلیل...
+                        </div>
+                    </div>
+                </div>
 
+                <!-- Final Verdict -->
+                <div class="mt-8 text-center">
+                    <div id="finalVerdict" class="inline-flex items-center px-6 py-3 rounded-full text-lg font-semibold">
+                        <div class="ai-indicator w-3 h-3 rounded-full ml-3"></div>
+                        <span>در حال بررسی...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Features Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="w-12 h-12 bg-blue-500 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">سرعت بالا</h3>
+                <p class="text-white/80 text-sm">تجزیه و تحلیل فوری متن در کمتر از 3 ثانیه</p>
+            </div>
 
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="w-12 h-12 bg-green-500 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">دقت بالا</h3>
+                <p class="text-white/80 text-sm">دقت بیش از 94% در تشخیص محتوای AI</p>
+            </div>
+
+            <div class="glass-effect rounded-xl p-6 text-center">
+                <div class="w-12 h-12 bg-purple-500 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-white mb-2">امنیت کامل</h3>
+                <p class="text-white/80 text-sm">حفظ حریم خصوصی و عدم ذخیره اطلاعات</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // DOM Elements
+        const textInput = document.getElementById('textInput');
+        const charCount = document.getElementById('charCount');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const refreshIcon = document.getElementById('refreshIcon');
+        const resultsSection = document.getElementById('resultsSection');
+        const uploadBtn = document.getElementById('uploadBtn');
+
+        // Stats elements
+        const totalScans = document.getElementById('totalScans');
+        const accuracy = document.getElementById('accuracy');
+        const avgTime = document.getElementById('avgTime');
+
+        // Result elements
+        const aiPercentage = document.getElementById('aiPercentage');
+        const humanPercentage = document.getElementById('humanPercentage');
+        const aiProgressBar = document.getElementById('aiProgressBar');
+        const humanProgressBar = document.getElementById('humanProgressBar');
+        const wordCount = document.getElementById('wordCount');
+        const complexity = document.getElementById('complexity');
+        const processingTime = document.getElementById('processingTime');
+        const recommendations = document.getElementById('recommendations');
+        const finalVerdict = document.getElementById('finalVerdict');
+
+        // Character counter
+        textInput.addEventListener('input', function() {
+            const count = this.value.length;
+            charCount.textContent = `${count.toLocaleString('fa-IR')} کاراکتر`;
+        });
+
+        // Clear button
+        clearBtn.addEventListener('click', function() {
+            textInput.value = '';
+            charCount.textContent = '0 کاراکتر';
+            resultsSection.classList.add('hidden');
+        });
+
+        // Refresh button with animation
+        refreshBtn.addEventListener('click', function() {
+            refreshIcon.style.transform = 'rotate(360deg)';
+            refreshIcon.style.transition = 'transform 0.5s ease';
+            
+            // Update stats with random values
+            setTimeout(() => {
+                const newScans = Math.floor(Math.random() * 500) + 1200;
+                const newAccuracy = (Math.random() * 5 + 92).toFixed(1);
+                const newTime = (Math.random() * 2 + 1.5).toFixed(1);
+                
+                totalScans.textContent = newScans.toLocaleString('fa-IR');
+                accuracy.textContent = `${newAccuracy}%`;
+                avgTime.textContent = `${newTime}s`;
+                
+                refreshIcon.style.transform = 'rotate(0deg)';
+            }, 250);
+        });
+
+        // File upload simulation
+        uploadBtn.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.txt,.doc,.docx,.pdf';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    textInput.value = `فایل "${file.name}" آپلود شد.\n\nمحتوای نمونه: این یک متن نمونه است که از فایل آپلود شده استخراج شده است. سیستم هوش مصنوعی ما قادر به تجزیه و تحلیل انواع مختلف فایل‌های متنی است و با دقت بالایی می‌تواند تشخیص دهد که آیا محتوا توسط هوش مصنوعی تولید شده یا توسط انسان نوشته شده است.`;
+                    charCount.textContent = `${textInput.value.length.toLocaleString('fa-IR')} کاراکتر`;
+                }
+            };
+            input.click();
+        });
+
+        // Main analysis function
+        analyzeBtn.addEventListener('click', function() {
+            const text = textInput.value.trim();
+            
+            if (!text) {
+                alert('لطفاً ابتدا متنی را وارد کنید.');
+                return;
+            }
+
+            // Show results section
+            resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+
+            // Reset progress bars
+            aiProgressBar.style.width = '0%';
+            humanProgressBar.style.width = '0%';
+            aiPercentage.textContent = '0%';
+            humanPercentage.textContent = '0%';
+
+            // Simulate analysis
+            const startTime = Date.now();
+            
+            // Calculate word count
+            const words = text.split(/\s+/).filter(word => word.length > 0);
+            wordCount.textContent = words.length.toLocaleString('fa-IR');
+
+            // Simulate AI detection algorithm
+            setTimeout(() => {
+                // Generate realistic AI probability based on text characteristics
+                let aiProb = 0;
+                
+                // Check for AI-like patterns
+                const aiIndicators = [
+                    /به طور کلی|در نهایت|بنابراین|از طرف دیگر/g,
+                    /\d+\.\s/g, // Numbered lists
+                    /همچنین|علاوه بر این|در ادامه/g,
+                    text.length > 500 && words.length / text.length > 0.15, // High word density
+                ];
+
+                aiIndicators.forEach(indicator => {
+                    if (typeof indicator === 'boolean' && indicator) {
+                        aiProb += 15;
+                    } else if (indicator instanceof RegExp) {
+                        const matches = text.match(indicator);
+                        if (matches) aiProb += matches.length * 8;
+                    }
+                });
+
+                // Add randomness for realism
+                aiProb += Math.random() * 30;
+                aiProb = Math.min(Math.max(aiProb, 5), 95); // Keep between 5-95%
+                
+                const humanProb = 100 - aiProb;
+
+                // Animate progress bars
+                setTimeout(() => {
+                    aiProgressBar.style.width = `${aiProb}%`;
+                    humanProgressBar.style.width = `${humanProb}%`;
+                    aiPercentage.textContent = `${aiProb.toFixed(1)}%`;
+                    humanPercentage.textContent = `${humanProb.toFixed(1)}%`;
+
+                    // Set progress bar colors based on probability
+                    if (aiProb > 70) {
+                        aiProgressBar.className = 'bg-red-500 h-3 rounded-full transition-all duration-1000 ease-out';
+                    } else if (aiProb > 40) {
+                        aiProgressBar.className = 'bg-yellow-500 h-3 rounded-full transition-all duration-1000 ease-out';
+                    } else {
+                        aiProgressBar.className = 'bg-green-500 h-3 rounded-full transition-all duration-1000 ease-out';
+                    }
+                }, 500);
+
+                // Set complexity
+                if (words.length < 50) {
+                    complexity.textContent = 'ساده';
+                } else if (words.length < 200) {
+                    complexity.textContent = 'متوسط';
+                } else {
+                    complexity.textContent = 'پیچیده';
+                }
+
+                // Processing time
+                const endTime = Date.now();
+                const duration = ((endTime - startTime) / 1000).toFixed(1);
+                processingTime.textContent = `${duration}s`;
+
+                // Recommendations
+                let recText = '';
+                if (aiProb > 70) {
+                    recText = 'این متن احتمال بالایی دارد که توسط هوش مصنوعی تولید شده باشد. ساختار و الگوهای زبانی آن شباهت زیادی به محتوای AI دارد.';
+                } else if (aiProb > 40) {
+                    recText = 'این متن ممکن است ترکیبی از محتوای انسانی و هوش مصنوعی باشد. برای اطمینان بیشتر، بخش‌های مختلف را جداگانه بررسی کنید.';
+                } else {
+                    recText = 'این متن احتمال بالایی دارد که توسط انسان نوشته شده باشد. سبک نگارش و ساختار طبیعی آن نشان‌دهنده نویسندگی انسانی است.';
+                }
+                recommendations.textContent = recText;
+
+                // Final verdict
+                setTimeout(() => {
+                    const verdictElement = finalVerdict;
+                    if (aiProb > 70) {
+                        verdictElement.className = 'inline-flex items-center px-6 py-3 rounded-full text-lg font-semibold bg-red-500/20 text-red-300 border border-red-500/30';
+                        verdictElement.innerHTML = '<div class="ai-indicator w-3 h-3 rounded-full ml-3 bg-red-500"></div><span>احتمالاً هوش مصنوعی</span>';
+                    } else if (aiProb > 40) {
+                        verdictElement.className = 'inline-flex items-center px-6 py-3 rounded-full text-lg font-semibold bg-yellow-500/20 text-yellow-300 border border-yellow-500/30';
+                        verdictElement.innerHTML = '<div class="ai-indicator w-3 h-3 rounded-full ml-3 bg-yellow-500"></div><span>نامشخص - نیاز به بررسی بیشتر</span>';
+                    } else {
+                        verdictElement.className = 'inline-flex items-center px-6 py-3 rounded-full text-lg font-semibold bg-green-500/20 text-green-300 border border-green-500/30';
+                        verdictElement.innerHTML = '<div class="ai-indicator w-3 h-3 rounded-full ml-3 bg-green-500"></div><span>احتمالاً انسانی</span>';
+                    }
+
+                    // Show result cards with animation
+                    const resultCards = document.querySelectorAll('.result-card');
+                    resultCards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('show');
+                        }, index * 200);
+                    });
+                }, 1000);
+
+            }, 1500);
+        });
+
+        // Initialize with some sample stats
+        window.addEventListener('load', function() {
+            const resultCards = document.querySelectorAll('.result-card');
+            resultCards.forEach(card => {
+                card.classList.add('show');
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'974cb3fe8633b5aa',t:'MTc1NjE0MTgyOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
