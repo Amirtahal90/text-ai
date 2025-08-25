@@ -1,0 +1,30 @@
+@font-face {
+    font-family: VB;
+    src: url(./vazir-font-v16.1.0/Vazir-Bold.ttf);
+}
+
+@font-face {
+    font-family: VZ;
+    src: url(./vazir-font-v16.1.0/Vazir.ttf);
+}
+
+* {
+    font-family: VB;
+    margin: 0 auto;
+
+}
+
+body {
+    color: white;
+    text-align: center;
+    background-color: darkviolet;
+}
+mark{
+    background-color: aqua;
+    border-radius: 10px;
+    padding: 0px 8px;
+}
+a{
+    color: black;
+    text-decoration: none;
+}
