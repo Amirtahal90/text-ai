@@ -1,12 +1,12 @@
 /* ===== فونت ===== */
 @font-face {
     font-family: VB;
-    src: url(./Vazir-Bold.woff);
+    src: url(./Vazir-Bold.ttf);
 }
 
 @font-face {
     font-family: VZ;
-    src: url(./Vazir.woff);
+    src: url(./Vazir-‌Bold.ttf);
 }
 
 * {
