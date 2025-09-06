@@ -142,6 +142,34 @@
     </div>
 </footer>
 
-<script src="./script.js"></script>
+<script>
+    // Preloader
+window.addEventListener("load", () => {
+    document.getElementById("preloader").style.display = "none";
+});
+
+// Scroll animation
+const scrollElements = document.querySelectorAll(".animate-scroll");
+const scrollInView = (el) => {
+    const rect = el.getBoundingClientRect();
+    return rect.top <= (window.innerHeight - 100);
+};
+const scrollAnimation = () => {
+    scrollElements.forEach(el => {
+        if(scrollInView(el)) el.classList.add("visible");
+    });
+};
+window.addEventListener("scroll", scrollAnimation);
+
+// Hamburger menu toggle
+const hamburger = document.querySelector(".hamburger");
+const mobileMenu = document.querySelector(".mobile-menu");
+const closeMenu = document.querySelector(".close-menu");
+
+hamburger.addEventListener("click", () => { mobileMenu.classList.add("active"); });
+closeMenu.addEventListener("click", () => { mobileMenu.classList.remove("active"); });
+
+</script>
 </body>
 </html>
+
