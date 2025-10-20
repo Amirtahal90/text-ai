@@ -1,179 +1,24 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="theme-color" content="#42A5F5">
-
-<title>ایران افزار | مرجع آموزش و فناوری</title>
-<link rel="stylesheet" href="./style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-</head>
-<body>
-
-<!-- Preloader -->
-<div id="preloader">
-    <div class="loader"></div>
-    <p>در حال بارگذاری...</p>
-</div>
-
-<!-- Header -->
-<header class="hed">
-    <div class="div-site-name">
-        <img src="./icons8-iran-64.png" alt="ایران سخت افزار" class="img-iran">
-        <h2 class="text-name">ایران افزار</h2>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href=".style.css" />
+    <title>نمره آقای جمالی</title>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="title">آقای جمالی سایت واسه تو زده شده</h2>
+      <div class="text-score">
+        <h4 class="text-score-title">سخنی از شاعر معروف :</h4>
+        <pre class="text-score-poetry">این نمره ها نکند بر کسی وفا            بده این نمره را در راه خدا</pre>
+      </div>
+      <div class="box-btn">
+        <button class="btn-no">نمره نمیدم</button>
+        <button class="btn-yes">حله نمره رو میدم</button>
+      </div>
+      <h4 class="text-fot-builder">سازنده : امیرطاها بارانی.....</h4>
+      <h4 class="text-fot-class">نام کلاس : 9/2</h4>
     </div>
-    <!-- Desktop Menu -->
-    <nav class="nav desktop-menu">
-        <a href="#" class="hed-link"><i class="fas fa-home"></i> خانه</a>
-        <a href="#" class="hed-link dropdown"><i class="fas fa-info-circle"></i> درباره ما
-            <div class="mega-menu">
-                <a href="#">تاریخچه</a>
-                <a href="#">ماموریت و اهداف</a>
-                <a href="#">تیم ما</a>
-            </div>
-        </a>
-        <a href="#" class="hed-link dropdown"><i class="fas fa-book"></i> مقالات
-            <div class="mega-menu">
-                <a href="#">برنامه نویسی</a>
-                <a href="#">طراحی</a>
-                <a href="#">شبکه و امنیت</a>
-            </div>
-        </a>
-        <a href="#" class="hed-link"><i class="fas fa-cogs"></i> خدمات</a>
-        <a href="#" class="hed-link"><i class="fas fa-envelope"></i> تماس</a>
-        <a href="#" class="hed-link"><i class="fas fa-user"></i> ورود / ثبت‌نام</a>
-    </nav>
-
-    <!-- Hamburger for Mobile -->
-    <div class="hamburger">
-        <i class="fas fa-bars"></i>
-    </div>
-</header>
-
-<!-- Mobile Menu Slide-in -->
-<nav class="mobile-menu">
-    <i class="fas fa-times close-menu"></i>
-    <a href="#">خانه</a>
-    <a href="#">درباره ما</a>
-    <a href="#">مقالات</a>
-    <a href="#">خدمات</a>
-    <a href="#">تماس</a>
-    <a href="#">ورود / ثبت‌نام</a>
-</nav>
-
-<!-- Hero Section -->
-<main class="main">
-    <section class="hero animate-slide">
-        <h1 class="text-h1">ایران افزار | مرجع آموزش و فناوری</h1>
-        <h3 class="text-h4">از یادگیری تا اشتغال، هر آنچه برای رشد نیاز داری در یک مکان</h3>
-        <div class="btn-group">
-            <button class="button"><i class="fas fa-book-reader"></i> مطالب آموزشی</button>
-            <button class="button"><i class="fas fa-mobile-alt"></i> نرم‌افزار موبایل</button>
-            <button class="button"><i class="fas fa-graduation-cap"></i> دوره‌های آموزشی</button>
-        </div>
-    </section>
-
-    <!-- Job Section -->
-    <section class="job-section animate-scroll">
-        <h2 id="personel-text"><i class="fas fa-briefcase"></i> استخدام در <a href="https://iran.ir/" target="_blank" class="text-link-personel" id="iran-afzar">ایران افزار</a></h2>
-        <h3 class="personel-text-h3">فرصت‌های شغلی: برنامه‌نویس، طراح سایت، گرافیست، بک‌اند کار و مشاغل دیگر</h3>
-        <p class="p-text">ایران افزار پلی است به آینده شغلی روشن شما.</p>
-        <button type="button" onclick="window.open('https://iran.ir/', '_blank')" class="btn"><i class="fas fa-user-plus"></i> ثبت‌نام</button>
-        <h2 class="h3-end">ظرفیت محدود است — همین حالا اقدام کنید!</h2>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services animate-scroll">
-        <h2 class="section-title">خدمات ما</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <i class="fas fa-laptop-code"></i>
-                <h3>برنامه نویسی</h3>
-                <p>دوره‌های تخصصی برای یادگیری برنامه‌نویسی وب و موبایل</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-paint-brush"></i>
-                <h3>طراحی گرافیک</h3>
-                <p>آموزش طراحی UI/UX و ابزارهای گرافیکی روز دنیا</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-network-wired"></i>
-                <h3>شبکه و امنیت</h3>
-                <p>آموزش‌های تخصصی شبکه و امنیت سایبری</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-video"></i>
-                <h3>دوره‌های ویدیویی</h3>
-                <p>دوره‌های ویدیویی با کیفیت بالا و پشتیبانی کامل</p>
-            </div>
-        </div>
-    </section>
-</main>
-
-<!-- Footer -->
-<footer class="fot">
-    <div class="fot-container">
-        <div class="fot-about">
-            <h3>درباره ما</h3>
-            <p>ایران افزار با هدف آموزش، توسعه فردی و شغلی و ارائه خدمات فناوری ایجاد شده است.</p>
-        </div>
-        <div class="fot-links">
-            <h3>لینک‌های مفید</h3>
-            <a href="#">خانه</a>
-            <a href="#">مقالات</a>
-            <a href="#">خدمات</a>
-            <a href="#">استخدام</a>
-            <a href="#">حریم خصوصی</a>
-        </div>
-        <div class="fot-contact">
-            <h3>تماس با ما</h3>
-            <p><i class="fas fa-envelope"></i> info@iran-afzar.ir</p>
-            <p><i class="fas fa-phone"></i> 021-12345678</p>
-            <p><i class="fas fa-map-marker-alt"></i> تهران، خیابان انقلاب</p>
-        </div>
-    </div>
-    <div class="fot-bottom">
-        <p>© 2025 ایران افزار - تمامی حقوق محفوظ است</p>
-        <div class="socials">
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-telegram"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-        </div>
-    </div>
-</footer>
-
-<script>
-    // Preloader
-window.addEventListener("load", () => {
-    document.getElementById("preloader").style.display = "none";
-});
-
-// Scroll animation
-const scrollElements = document.querySelectorAll(".animate-scroll");
-const scrollInView = (el) => {
-    const rect = el.getBoundingClientRect();
-    return rect.top <= (window.innerHeight - 100);
-};
-const scrollAnimation = () => {
-    scrollElements.forEach(el => {
-        if(scrollInView(el)) el.classList.add("visible");
-    });
-};
-window.addEventListener("scroll", scrollAnimation);
-
-// Hamburger menu toggle
-const hamburger = document.querySelector(".hamburger");
-const mobileMenu = document.querySelector(".mobile-menu");
-const closeMenu = document.querySelector(".close-menu");
-
-hamburger.addEventListener("click", () => { mobileMenu.classList.add("active"); });
-closeMenu.addEventListener("click", () => { mobileMenu.classList.remove("active"); });
-
-</script>
-</body>
+  </body>
 </html>
-
-
-
